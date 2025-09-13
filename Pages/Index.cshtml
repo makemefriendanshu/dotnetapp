@@ -8,9 +8,9 @@
 <link href="~/css/icons.css" rel="stylesheet" type="text/css" />
 <link href="~/css/style.css" rel="stylesheet" type="text/css" />
 
-<div class="wrapper" style="padding-top: 60px;">
-    <div class="container-fluid">
-        <div class="row" style="margin: 0px 0px 0px -370px;width: 172%;">
+<div class="" style="padding-top: 60px;">
+    <div class="">
+        <div class="row" >
             <div class="col-lg-14">
                 <div class="card m-b-30">
                     <div class="card-body">
@@ -36,10 +36,15 @@
     .grid-container {
         display: grid;
         /* Enables CSS Grid layout */
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         /* Creates two columns of equal width */
         gap: 20px;
         /* Adds a 20px gap between the columns */
+    }
+    @@media (min-width: 768px) { /* For tablets and desktops */
+      .grid-container {
+        grid-template-columns: repeat(2, 1fr); /* Two columns for tablets */
+      }
     }
 </style>
 
@@ -81,7 +86,7 @@
                     $("#long-" + itemCount)[0].innerText = longitude;
                     const mapDivHtml = `<div id="gmaps-markers-${itemCount}" class="gmaps" style="margin-top: 10px;"></div>`;
                     $('#map').append(mapDivHtml);
-
+                    window.scrollTo(0, document.body.scrollHeight);
                     itemCount++;
                     if (type == 'Enter') {
                         $("#enter-exit-button")[0].innerText = 'Exit';

@@ -42,7 +42,7 @@
             if ($('#lat-' + count)[0].innerText != "") {
               $this.createMarkers('#gmaps-markers-' + count, count);
             }
-          }, 400);
+          }, 500);
       });
     },
     //init
