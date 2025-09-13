@@ -19,15 +19,10 @@
                             aria-label="Toggle navigation" onclick="getUserLocation()" style="border: ridge;">
                             Enter
                         </button>
+                        <div id="lat">
+                        </div>
 
-                        <div id="lat-in" style="display:none"></div>
-                        <div id="long-in" style="display:none"></div>
-                        <div id="lat-out" style="display:none"></div>
-                        <div id="long-out" style="display:none"></div>
-
-                        <div style="display: flex;justify-content: space-between;">
-                            <div id="gmaps-markers-in" class="gmaps" style="margin-top: 10px;width: 49%;"></div>
-                            <div id="gmaps-markers-out" class="gmaps" style="margin-top: 10px;width: 49%;"></div>
+                        <div id="map" class="grid-container">
                         </div>
                     </div>
                 </div>
@@ -36,6 +31,17 @@
 
     </div> <!-- end container -->
 </div>
+
+<style>
+    .grid-container {
+        display: grid;
+        /* Enables CSS Grid layout */
+        grid-template-columns: 1fr 1fr;
+        /* Creates two columns of equal width */
+        gap: 20px;
+        /* Adds a 20px gap between the columns */
+    }
+</style>
 
 <script src="~/js/jquery.min.js"></script>
 <script src="~/js/popper.min.js"></script>
@@ -58,34 +64,32 @@
 
 
 <script type="text/javascript">
-    var in_location_lat = 0;
-    var in_location_long = 0;
-
+    let itemCount = 0;
     function getUserLocation() {
         let type = document.getElementById("enter-exit-button").innerText;
         console.log(type)
+        $('#map')[0].setAttribute('data-item-count', itemCount);
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
+                    const latDivHtml = `<div id="lat-${itemCount}" style="display: none"></div><div id="long-${itemCount}" style="display: none"></div>`;
+                    $('#lat').append(latDivHtml);
+                    $("#lat-" + itemCount)[0].innerText = latitude;
+                    $("#long-" + itemCount)[0].innerText = longitude;
+                    const mapDivHtml = `<div id="gmaps-markers-${itemCount}" class="gmaps" style="margin-top: 10px;"></div>`;
+                    $('#map').append(mapDivHtml);
+
+                    itemCount++;
                     if (type == 'Enter') {
-                        in_location_lat = latitude;
-                        in_location_long = longitude;
-                        $("#lat-in")[0].innerText = latitude;
-                        $("#long-in")[0].innerText = longitude;
                         $("#enter-exit-button")[0].innerText = 'Exit';
                     }
-
                     if (type == 'Exit') {
-                        out_location_lat = latitude;
-                        out_location_long = longitude;
-                        $("#lat-out")[0].innerText = latitude;
-                        $("#long-out")[0].innerText = longitude;
                         $("#enter-exit-button")[0].innerText = 'Enter';
                     }
                     console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-                    // You can now use these coordinates in your application
                 },
                 (error) => {
                     switch (error.code) {
@@ -108,7 +112,4 @@
             console.error("Geolocation is not supported by this browser.");
         }
     }
-
-    // Call the function to request the user's location
-    // getUserLocation();
 </script>
